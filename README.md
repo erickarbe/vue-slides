@@ -15,6 +15,6 @@ I used this at WordCamp Atlanta 2018 when I gave a talk on WordPress & Vue.js.
 
 1. Just swap out the URL (in index.html) with your local WordPress installation
 2. Use Posts in your local WordPress install. Each post = a slide.
-3. You might need to tweak some classes for images and so for in the CSS to get it how you want.
+3. You might need to tweak some classes for images and so forth in the CSS to get the look just right.
 
 Check out [slide.erickar.be](http://slides.erickar.be) for an example.
