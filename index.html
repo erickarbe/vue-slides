@@ -1,0 +1,148 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>WordPress and Vue.js</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <link rel="stylesheet" href="css/prism.css">
+        <link rel="stylesheet" href="css/main.css">
+
+        <script src="js/vue.js"></script>
+        <script src="js/axios.min.js"></script>
+        <script src="js/prism.js"></script>
+        
+    </head>
+    <body>
+
+    <div id="app" :class="{dark : partyMode}">
+        
+        <a class="party" @click.prevent="partyMode = !partyMode" href="#">Night Mode</a>
+        
+        <transition-group name="slide">
+            <div id="stage" class="stage" v-for="data in view" v-bind:key="pageIndex">
+                <div class="stage_inner" v-html="data.content.rendered"></div>
+            </div>
+        </transition-group>
+
+        <div class="navbar">
+            <button class="prev" v-on:click="prevpage">
+                <span class="controls-arrow"></span>
+            </button>
+            <button class="next" v-on:click="nextpage">
+                <span class="controls-arrow"></span>
+            </button>
+        </div>
+
+    </div>
+
+
+<script>
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    //message: 'Hello Vue!',
+    url: 'http://wordcamp.local/wp-json/wp/v2/posts?per_page=1&order=asc',
+    view: '',
+    postdata: [],
+    pageIndex: 0,
+    partyMode: false
+  },
+  mounted: function(){
+    
+        window.addEventListener('keyup', function(event) {
+            
+            // If right arrow was pressed...
+            if (event.keyCode == 39) { 
+                console.log('pressed')
+                app.nextpage()
+            }
+            // If left arrow is pressed...
+            if (event.keyCode == 37) { 
+                console.log('pressed')
+                app.prevpage()
+            }
+
+
+        })
+    
+
+  },
+  methods: {
+
+    loadposts: function(currentIndex){
+
+        let pageUrl = this.url+'&offset='+currentIndex
+
+        var self = this
+
+        axios.get(pageUrl)
+            .then(function (response) {
+
+                self.view = response.data
+
+            })
+            .catch(function(response) {
+                if(response instanceof Error) {
+                    console.log(response.message);
+                } else {
+                    console.log(response.data);
+                }
+            });
+        
+
+
+    },
+
+    nextpage: function(){
+        this.pageIndex++
+        this.loadposts(this.pageIndex)
+        history.pushState(null, null, '#'+this.pageIndex)
+        
+    },
+
+    prevpage: function(){
+        this.pageIndex--
+        this.loadposts(this.pageIndex)
+        history.pushState(null, null, '#'+this.pageIndex)
+        
+    },
+
+
+
+  },
+  created: function() {
+    
+    if(window.location.hash) {
+        var hash = window.location.hash.substring(1);
+        //console.log(hash);
+        this.pageIndex = hash
+        this.loadposts(hash)
+
+    } else {
+        // No hash found
+        this.loadposts(0)
+    }
+    
+
+  },
+  updated: function () {
+    
+    this.$nextTick(function () {
+        // Code that will run only after the
+        // entire view has been re-rendered
+        // This lets Prism work as it should
+        Prism.highlightAll();
+    })
+
+  }
+})
+
+</script>
+
+
+</body>
+</html>
