@@ -53,22 +53,20 @@ var app = new Vue({
   },
   mounted: function(){
     
-        window.addEventListener('keyup', function(event) {
-            
-            // If right arrow was pressed...
-            if (event.keyCode == 39) { 
-                console.log('pressed')
-                app.nextpage()
-            }
-            // If left arrow is pressed...
-            if (event.keyCode == 37) { 
-                console.log('pressed')
-                app.prevpage()
-            }
+    window.addEventListener('keyup', function(event) {
+        
+        // If right arrow was pressed...
+        if (event.keyCode == 39) { 
+            console.log('pressed')
+            app.nextpage()
+        }
+        // If left arrow is pressed...
+        if (event.keyCode == 37) { 
+            console.log('pressed')
+            app.prevpage()
+        }
 
-
-        })
-    
+    })
 
   },
   methods: {
@@ -92,8 +90,6 @@ var app = new Vue({
                     console.log(response.data);
                 }
             });
-        
-
 
     },
 
@@ -101,17 +97,13 @@ var app = new Vue({
         this.pageIndex++
         this.loadposts(this.pageIndex)
         history.pushState(null, null, '#'+this.pageIndex)
-        
     },
 
     prevpage: function(){
         this.pageIndex--
         this.loadposts(this.pageIndex)
         history.pushState(null, null, '#'+this.pageIndex)
-        
-    },
-
-
+    }
 
   },
   created: function() {
@@ -121,13 +113,11 @@ var app = new Vue({
         //console.log(hash);
         this.pageIndex = hash
         this.loadposts(hash)
-
     } else {
         // No hash found
         this.loadposts(0)
     }
     
-
   },
   updated: function () {
     
@@ -142,7 +132,6 @@ var app = new Vue({
 })
 
 </script>
-
 
 </body>
 </html>
